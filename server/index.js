@@ -1,7 +1,6 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import nodemailer from "nodemailer";
 import rateLimit from "express-rate-limit";
 import fs from "fs";
 import path from "path";
@@ -125,21 +124,30 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-function getTransporter() {
-  const { EMAIL_USER, EMAIL_PASS } = process.env;
-  if (!EMAIL_USER || !EMAIL_PASS) return null;
+async function sendViaBrevo({ toEmail, toName, subject, html }) {
+  const { BREVO_API_KEY, EMAIL_USER } = process.env;
+  if (!BREVO_API_KEY || !EMAIL_USER) return null; // not configured
 
-  return nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: EMAIL_USER,
-      pass: EMAIL_PASS
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": BREVO_API_KEY,
+      "Content-Type": "application/json",
+      accept: "application/json",
     },
-    tls: {
-      // இது Render-ல இருக்குற சில நெட்வொர்க் ஃபயர்வால் பிளாக்குகளைத் தவிர்க்க உதவும்
-      rejectUnauthorized: false
-    }
+    body: JSON.stringify({
+      sender: { name: "Portfolio Contact Form", email: EMAIL_USER },
+      to: [{ email: toEmail, name: toName || toEmail }],
+      subject,
+      htmlContent: html,
+    }),
   });
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Brevo API error (${res.status}): ${errText}`);
+  }
+  return res.json();
 }
 
 // ---- Routes -----------------------------------------------------------------
@@ -176,9 +184,9 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
     console.error("Failed to save submission locally:", err);
   }
 
-  const transporter = getTransporter();
+  const isEmailConfigured = process.env.BREVO_API_KEY && process.env.EMAIL_USER;
 
-  if (!transporter) {
+  if (!isEmailConfigured) {
     console.log("📩 New contact form submission (email not configured):", submission);
     return res.json({
       success: true,
@@ -187,13 +195,9 @@ app.post("/api/contact", contactLimiter, async (req, res) => {
   }
 
   try {
-    await transporter.sendMail({
-      from: `"Arjun Dev — Portfolio" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_TO || process.env.EMAIL_USER,
-      replyTo: submission.email,
+    await sendViaBrevo({
+      toEmail: process.env.EMAIL_TO || process.env.EMAIL_USER,
       subject: `📩 New project inquiry from ${submission.name}`,
-      text: `Name: ${submission.name}\nEmail: ${submission.email}\nBudget: ${submission.budget || "Not specified"
-        }\n\nMessage:\n${submission.message}`,
       html: buildEmailHtml(submission),
     });
 
