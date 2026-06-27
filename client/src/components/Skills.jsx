@@ -14,7 +14,7 @@ export default function Skills() {
                 <span className="kw2">import</span> {"{ "}
                 <span className="cat">{group.category}</span>
                 {" }"} <span className="kw2">from</span>{" "}
-                <span className="str2">"@arjun/stack"</span>
+                <span className="str2">"@rajasekar/stack"</span>
               </p>
               <ul className="skill-list">
                 {group.items.map((item) => (
