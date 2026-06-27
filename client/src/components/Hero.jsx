@@ -109,6 +109,20 @@ export default function Hero() {
           gap: 56px;
           align-items: center;
         }
+        .hero-copy {
+          animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .hero-editor {
+          animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.15s;
+        }
+        @keyframes heroFadeUp {
+          from { opacity: 0; transform: translateY(18px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .hero-copy, .hero-editor { animation: none; }
+        }
         .hero-title {
           font-family: var(--font-display);
           font-size: clamp(34px, 5vw, 52px);

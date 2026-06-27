@@ -3,12 +3,12 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 export const profile = {
-  name: "Rajasekar V",
+  name: "Arjun Dev",
   role: "Full-Stack Developer",
   tagline: "I build fast, reliable web products for clients worldwide.",
   location: "Chennai, India · Remote",
   availability: "Available for freelance projects",
-  email: "mailtorajasekar13@gmail.com",
+  email: "hello@arjundev.com",
   socials: [
     { label: "GitHub", url: "https://github.com/yourhandle" },
     { label: "LinkedIn", url: "https://linkedin.com/in/yourhandle" },
@@ -20,15 +20,15 @@ export const profile = {
 export const about = {
   heading: "About",
   paragraphs: [
-    "I'm a full-stack developer with 4+ years of experience turning product ideas into shipped, working software — from the first line of code to the deployed app your users actually touch.",
-    "I work mostly with React on the frontend and Node.js on the backend, and I care a lot about the parts that don't show up in a screenshot: clean APIs, sane database design, fast load times, and code the next developer can actually read.",
-    "I've worked with startups and small businesses across the US, UK, and Australia — async-friendly, comfortable with time-zone gaps, and direct about timelines and scope.",
+    "I'm a full-stack developer who turns product ideas into shipped, working software — from the first line of code to the deployed app your users actually touch.",
+    "React on the frontend, Node.js on the backend, and a habit of caring about the parts that don't show up in a screenshot: clean APIs, sane database design, fast load times.",
+    "I've worked with startups and small teams across the US, UK, and Australia — async-friendly, comfortable with time-zone gaps, direct about timelines and scope.",
   ],
   stats: [
-    { value: "40+", label: "Projects shipped" },
-    { value: "4+", label: "Years experience" },
-    { value: "15+", label: "Clients worldwide" },
-    { value: "98%", label: "Repeat client rate" },
+    { value: "40+", label: "Projects shipped", icon: "rocket" },
+    { value: "4+", label: "Years experience", icon: "calendar" },
+    { value: "15+", label: "Clients worldwide", icon: "globe" },
+    { value: "98%", label: "Repeat client rate", icon: "heart" },
   ],
 };
 
