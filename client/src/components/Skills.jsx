@@ -48,7 +48,9 @@ export default function Skills() {
             <Reveal key={group.category} delay={i * 80}>
               <div className="skill-card">
                 <div className="skill-card-head">
-                  <span className="skill-icon">{categoryIcons[group.category]}</span>
+                  <span className="skill-icon-badge" style={{ animationDelay: `${i * 0.4}s` }}>
+                    <span className="skill-icon">{categoryIcons[group.category]}</span>
+                  </span>
                   <span className="skill-cat-label mono">{categoryLabels[group.category]}</span>
                 </div>
                 <ul className="skill-list">
@@ -77,7 +79,7 @@ export default function Skills() {
           border-radius: var(--radius);
           padding: 24px;
           overflow: hidden;
-          transition: border-color 0.25s ease, transform 0.25s ease;
+          transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
         }
         .skill-card::before {
           content: "";
@@ -89,8 +91,9 @@ export default function Skills() {
           transition: opacity 0.25s ease;
         }
         .skill-card:hover {
-          border-color: rgba(79, 140, 255, 0.35);
-          transform: translateY(-3px);
+          border-color: var(--accent);
+          transform: translateY(-4px);
+          box-shadow: 0 18px 40px -22px rgba(124, 58, 237, 0.3);
         }
         .skill-card:hover::before {
           opacity: 1;
@@ -98,16 +101,38 @@ export default function Skills() {
         .skill-card-head {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 14px;
           margin-bottom: 18px;
+        }
+        .skill-icon-badge {
+          width: 44px;
+          height: 44px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 11px;
+          background: var(--accent-soft);
+          animation: iconFloat 3.4s ease-in-out infinite;
+        }
+        @keyframes iconFloat {
+          0%, 100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-4px) rotate(-4deg); }
+        }
+        .skill-card:hover .skill-icon-badge {
+          animation: none;
+          transform: scale(1.12) rotate(8deg);
+          transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
         .skill-icon {
           width: 22px;
           height: 22px;
           color: var(--accent);
-          flex-shrink: 0;
         }
         .skill-icon svg { width: 100%; height: 100%; }
+        @media (prefers-reduced-motion: reduce) {
+          .skill-icon-badge { animation: none; }
+        }
         .skill-cat-label {
           font-size: 13px;
           letter-spacing: 0.04em;

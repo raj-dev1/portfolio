@@ -3,6 +3,8 @@ import Reveal from "./Reveal.jsx";
 import { ArrowUpRightIcon } from "./icons.jsx";
 
 export default function Projects() {
+  const [featured, ...rest] = projects.items;
+
   return (
     <section id="projects" className="section projects">
       <div className="container">
@@ -11,8 +13,39 @@ export default function Projects() {
           <h2 className="section-title">{projects.heading}</h2>
         </Reveal>
 
+        {featured && (
+          <Reveal>
+            <article className="featured-project">
+              <div className="featured-image">
+                <img src={featured.image} alt={`${featured.title} preview`} />
+              </div>
+              <div className="featured-body">
+                <span className="featured-tag mono">Featured</span>
+                <div className="featured-head">
+                  <h3 className="featured-title mono">{featured.title}</h3>
+                  <span className="project-year mono">{featured.year}</span>
+                </div>
+                <p className="featured-desc">{featured.description}</p>
+                <div className="project-stack">
+                  {featured.stack.map((tech) => (
+                    <span key={tech} className="stack-tag mono">{tech}</span>
+                  ))}
+                </div>
+                <div className="project-links">
+                  <a href={featured.liveUrl} target="_blank" rel="noreferrer" className="btn btn-primary">
+                    Live demo <ArrowUpRightIcon />
+                  </a>
+                  <a href={featured.codeUrl} target="_blank" rel="noreferrer" className="btn">
+                    Source <ArrowUpRightIcon />
+                  </a>
+                </div>
+              </div>
+            </article>
+          </Reveal>
+        )}
+
         <div className="project-grid">
-          {projects.items.map((project, i) => (
+          {rest.map((project, i) => (
             <Reveal key={project.title} delay={i * 90}>
               <article className="project-card">
                 <div className="project-image-wrap">
@@ -32,9 +65,7 @@ export default function Projects() {
                   <p className="project-desc">{project.description}</p>
                   <div className="project-stack">
                     {project.stack.map((tech) => (
-                      <span key={tech} className="stack-tag mono">
-                        {tech}
-                      </span>
+                      <span key={tech} className="stack-tag mono">{tech}</span>
                     ))}
                   </div>
                   <div className="project-links">
@@ -53,6 +84,88 @@ export default function Projects() {
       </div>
 
       <style>{`
+        .featured-project {
+          display: grid;
+          grid-template-columns: 1.1fr 1fr;
+          gap: 0;
+          background: var(--panel);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          overflow: hidden;
+          margin-bottom: 28px;
+          transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+        .featured-project:hover {
+          border-color: var(--accent);
+          box-shadow: 0 30px 60px -32px rgba(124, 58, 237, 0.32);
+        }
+        .featured-image {
+          background: var(--panel-2);
+          overflow: hidden;
+        }
+        .featured-image img {
+          width: 100%;
+          height: 100%;
+          min-height: 280px;
+          object-fit: cover;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .featured-project:hover .featured-image img {
+          transform: scale(1.04);
+        }
+        .featured-body {
+          padding: 36px 40px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .featured-tag {
+          display: inline-block;
+          font-size: 11.5px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          color: var(--accent);
+          background: var(--accent-soft);
+          padding: 5px 11px;
+          border-radius: 999px;
+          width: fit-content;
+          margin-bottom: 16px;
+        }
+        .featured-head {
+          display: flex;
+          align-items: baseline;
+          gap: 12px;
+          margin-bottom: 12px;
+        }
+        .featured-title {
+          font-size: 24px;
+          font-weight: 600;
+        }
+        .featured-desc {
+          color: var(--muted);
+          font-size: 15.5px;
+          line-height: 1.65;
+          margin-bottom: 20px;
+        }
+        .project-stack {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px;
+          margin-bottom: 22px;
+        }
+        .stack-tag {
+          font-size: 11.5px;
+          padding: 4px 10px;
+          border-radius: 5px;
+          background: var(--accent-soft);
+          color: var(--accent);
+        }
+        .featured-body .project-links {
+          display: flex;
+          gap: 12px;
+          flex-wrap: wrap;
+        }
+
         .project-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
@@ -68,7 +181,7 @@ export default function Projects() {
         .project-card:hover {
           border-color: var(--accent);
           transform: translateY(-4px);
-          box-shadow: 0 24px 50px -28px rgba(79, 140, 255, 0.4);
+          box-shadow: 0 24px 50px -28px rgba(124, 58, 237, 0.3);
         }
         .project-image-wrap {
           position: relative;
@@ -88,7 +201,7 @@ export default function Projects() {
         .project-image-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, transparent 40%, rgba(10, 14, 19, 0.85));
+          background: linear-gradient(180deg, transparent 40%, rgba(28, 23, 38, 0.78));
           display: flex;
           align-items: flex-end;
           justify-content: flex-end;
@@ -107,7 +220,7 @@ export default function Projects() {
           font-size: 12.5px;
           font-weight: 500;
           background: var(--accent);
-          color: #06090d;
+          color: #fff;
           padding: 8px 14px;
           border-radius: 6px;
         }
@@ -133,19 +246,6 @@ export default function Projects() {
           font-size: 14.5px;
           margin-bottom: 18px;
         }
-        .project-stack {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 8px;
-          margin-bottom: 18px;
-        }
-        .stack-tag {
-          font-size: 11.5px;
-          padding: 4px 9px;
-          border-radius: 5px;
-          background: rgba(79, 140, 255, 0.1);
-          color: var(--accent);
-        }
         .project-links {
           display: flex;
           gap: 18px;
@@ -163,6 +263,14 @@ export default function Projects() {
         .project-link:hover {
           color: var(--accent);
           border-color: var(--accent);
+        }
+        @media (max-width: 860px) {
+          .featured-project {
+            grid-template-columns: 1fr;
+          }
+          .featured-body {
+            padding: 28px 24px;
+          }
         }
         @media (max-width: 760px) {
           .project-grid {

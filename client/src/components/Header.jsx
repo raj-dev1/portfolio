@@ -70,14 +70,14 @@ export default function Header() {
           left: 0;
           right: 0;
           z-index: 100;
-          background: rgba(10, 14, 19, 0.7);
+          background: rgba(250, 249, 252, 0.7);
           backdrop-filter: blur(10px);
           border-bottom: 1px solid transparent;
           transition: border-color 0.2s ease, background 0.2s ease;
         }
         .site-header.scrolled {
           border-bottom-color: var(--border);
-          background: rgba(10, 14, 19, 0.92);
+          background: rgba(250, 249, 252, 0.92);
         }
         .header-inner {
           display: flex;

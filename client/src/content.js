@@ -5,9 +5,10 @@
 export const profile = {
   name: "Arjun Dev",
   role: "Full-Stack Developer",
+  rotatingWords: ["fast products.", "shipped code.", "real businesses.", "happy clients."],
   tagline: "I build fast, reliable web products for clients worldwide.",
   location: "Chennai, India · Remote",
-  availability: "Available for freelance projects",
+  availability: "Available for new projects",
   email: "hello@arjundev.com",
   socials: [
     { label: "GitHub", url: "https://github.com/yourhandle" },
@@ -102,7 +103,7 @@ export const projects = {
 
 export const contact = {
   heading: "Contact",
-  subheading: "Have a project in mind?",
+  subheading: "Let's build something together.",
   description:
-    "Tell me a bit about what you're building and I'll get back to you within a day, usually sooner.",
+    "Share a few details about your project and I'll reply within a day with next steps — no automated forms, no waiting weeks.",
 };

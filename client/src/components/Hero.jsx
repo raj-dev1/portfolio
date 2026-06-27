@@ -12,7 +12,7 @@ const CODE_LINES = [
   { n: 8, html: `};` },
 ];
 
-export default function Hero() {
+function useTypedCode() {
   const [visibleChars, setVisibleChars] = useState(0);
   const fullText = CODE_LINES.map((l) => l.html.replace(/<[^>]+>/g, "")).join("\n");
   const totalChars = fullText.length;
@@ -33,29 +33,56 @@ export default function Hero() {
     return () => clearInterval(id);
   }, [totalChars]);
 
-  // Figure out, per line, how much of it should be shown given visibleChars
   let consumed = 0;
-  const renderedLines = CODE_LINES.map((line) => {
+  return CODE_LINES.map((line) => {
     const plain = line.html.replace(/<[^>]+>/g, "");
     const start = consumed;
-    consumed += plain.length + 1; // +1 for the newline
+    consumed += plain.length + 1;
     const charsForThisLine = Math.max(0, Math.min(plain.length, visibleChars - start));
     if (charsForThisLine <= 0) return { ...line, show: "" };
     if (charsForThisLine >= plain.length) return { ...line, show: line.html };
-    // partial reveal: fall back to plain text slice (avoids cutting tags mid-way)
     return { ...line, show: plain.slice(0, charsForThisLine) };
   });
+}
+
+function useRotatingWord(words, interval = 2400) {
+  const [index, setIndex] = useState(0);
+  const [fading, setFading] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setFading(true);
+      setTimeout(() => {
+        setIndex((i) => (i + 1) % words.length);
+        setFading(false);
+      }, 280);
+    }, interval);
+    return () => clearInterval(id);
+  }, [words.length, interval]);
+
+  return { word: words[index], fading };
+}
+
+export default function Hero() {
+  const renderedLines = useTypedCode();
+  const { word, fading } = useRotatingWord(profile.rotatingWords);
 
   return (
     <section id="top" className="hero">
       <div className="container hero-grid">
         <div className="hero-copy">
-          <p className="eyebrow mono">{profile.availability}</p>
+          <div className="status-pill">
+            <span className="status-dot" />
+            <span className="mono">{profile.availability}</span>
+          </div>
+
           <h1 className="hero-title">
-            {profile.name}
-            <span className="hero-role">{profile.role}</span>
+            I turn ideas into
+            <span className={`hero-rotator ${fading ? "fading" : ""}`}>{word}</span>
           </h1>
+
           <p className="hero-tagline">{profile.tagline}</p>
+
           <div className="hero-actions">
             <a href="#projects" className="btn btn-primary">
               View work
@@ -64,7 +91,12 @@ export default function Hero() {
               Start a project →
             </a>
           </div>
+
           <div className="hero-meta mono">
+            <span>{profile.name}</span>
+            <span className="meta-dot">·</span>
+            <span>{profile.role}</span>
+            <span className="meta-dot">·</span>
             <span>{profile.location}</span>
           </div>
         </div>
@@ -101,7 +133,7 @@ export default function Hero() {
           padding: 168px 0 96px;
           border-bottom: 1px solid var(--border);
           background:
-            radial-gradient(ellipse 70% 50% at 80% 0%, rgba(79,140,255,0.10), transparent 60%);
+            radial-gradient(ellipse 70% 50% at 80% 0%, rgba(124,58,237,0.08), transparent 60%);
         }
         .hero-grid {
           display: grid;
@@ -123,21 +155,65 @@ export default function Hero() {
         @media (prefers-reduced-motion: reduce) {
           .hero-copy, .hero-editor { animation: none; }
         }
+
+        .status-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          font-size: 13px;
+          color: var(--text);
+          background: var(--panel);
+          border: 1px solid var(--border);
+          padding: 7px 14px 7px 11px;
+          border-radius: 999px;
+          margin-bottom: 26px;
+          box-shadow: 0 2px 10px -4px rgba(28, 23, 38, 0.08);
+        }
+        .status-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: var(--green);
+          position: relative;
+          flex-shrink: 0;
+        }
+        .status-dot::after {
+          content: "";
+          position: absolute;
+          inset: -4px;
+          border-radius: 50%;
+          background: var(--green);
+          opacity: 0.4;
+          animation: pulse 2s ease-out infinite;
+        }
+        @keyframes pulse {
+          0% { transform: scale(0.6); opacity: 0.5; }
+          70% { transform: scale(1.8); opacity: 0; }
+          100% { opacity: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .status-dot::after { animation: none; opacity: 0; }
+        }
+
         .hero-title {
           font-family: var(--font-display);
-          font-size: clamp(34px, 5vw, 52px);
+          font-size: clamp(32px, 4.6vw, 48px);
           font-weight: 700;
-          line-height: 1.08;
+          line-height: 1.15;
           letter-spacing: -0.02em;
           margin-bottom: 18px;
           display: flex;
           flex-direction: column;
-          gap: 6px;
+          gap: 4px;
         }
-        .hero-role {
-          font-size: clamp(18px, 2.2vw, 24px);
-          font-weight: 500;
+        .hero-rotator {
           color: var(--accent);
+          display: inline-block;
+          transition: opacity 0.28s ease, transform 0.28s ease;
+        }
+        .hero-rotator.fading {
+          opacity: 0;
+          transform: translateY(6px);
         }
         .hero-tagline {
           font-size: 17px;
@@ -152,9 +228,15 @@ export default function Hero() {
           margin-bottom: 28px;
         }
         .hero-meta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
           font-size: 13px;
           color: var(--muted);
+          flex-wrap: wrap;
         }
+        .meta-dot { color: var(--border); }
+
         .editor-body {
           padding: 20px 0;
           font-size: 13.5px;
@@ -171,7 +253,7 @@ export default function Hero() {
           padding: 0 20px;
         }
         .line-no {
-          color: #46505e;
+          color: #c9c2d8;
           user-select: none;
           width: 16px;
           flex-shrink: 0;
@@ -179,9 +261,9 @@ export default function Hero() {
         }
         .kw { color: var(--accent); }
         .str { color: var(--accent-2); }
-        .cmt { color: #5b6675; }
+        .cmt { color: #9b93ab; }
         .bool { color: var(--green); }
-        .var { color: #d2a8ff; }
+        .var { color: #be185d; }
         .cursor {
           margin-left: 56px;
           color: var(--accent);
