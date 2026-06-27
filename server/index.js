@@ -130,14 +130,15 @@ function getTransporter() {
   if (!EMAIL_USER || !EMAIL_PASS) return null;
 
   return nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 465,
-    secure: true,           // Port 465
+    service: "gmail",
     auth: {
       user: EMAIL_USER,
       pass: EMAIL_PASS
     },
-    connectionTimeout: 10000 // 
+    tls: {
+      // இது Render-ல இருக்குற சில நெட்வொர்க் ஃபயர்வால் பிளாக்குகளைத் தவிர்க்க உதவும்
+      rejectUnauthorized: false
+    }
   });
 }
 
