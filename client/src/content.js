@@ -3,7 +3,7 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 export const profile = {
-  name: "RAJASEKAR V",
+  name: "Rajasekar V",
   role: "Full-Stack Developer",
   tagline: "I build fast, reliable web products for clients worldwide.",
   location: "Chennai, India · Remote",
