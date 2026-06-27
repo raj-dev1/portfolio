@@ -106,9 +106,9 @@ function buildEmailHtml(submission) {
       <div style="padding:16px 24px;border-top:1px solid #232b36;">
         <p style="margin:0;font-size:11.5px;color:#5b6675;">
           Received ${new Date(submission.receivedAt).toLocaleString("en-US", {
-    dateStyle: "medium",
-    timeStyle: "short",
-  })} · sent via your portfolio site
+            dateStyle: "medium",
+            timeStyle: "short",
+          })} · sent via your portfolio site
         </p>
       </div>
 

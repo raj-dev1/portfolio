@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { contact, profile } from "../content.js";
 import { API_URL } from "../config.js";
+import Reveal from "./Reveal.jsx";
+import { GithubIcon, LinkedinIcon, UpworkIcon, XIcon } from "./icons.jsx";
+
+const socialIcons = {
+  GitHub: GithubIcon,
+  LinkedIn: LinkedinIcon,
+  Upwork: UpworkIcon,
+  "Twitter / X": XIcon,
+};
 
 const initialForm = { name: "", email: "", budget: "", message: "" };
 
@@ -42,25 +51,32 @@ export default function Contact() {
   return (
     <section id="contact" className="section contact">
       <div className="container contact-grid">
-        <div>
-          <p className="eyebrow mono">04 · get in touch</p>
-          <h2 className="section-title">{contact.heading}</h2>
-          <p className="contact-sub">{contact.subheading}</p>
-          <p className="contact-desc">{contact.description}</p>
+        <Reveal>
+          <div>
+            <p className="eyebrow mono">get in touch</p>
+            <h2 className="section-title">{contact.heading}</h2>
+            <p className="contact-sub">{contact.subheading}</p>
+            <p className="contact-desc">{contact.description}</p>
 
-          <a href={`mailto:${profile.email}`} className="contact-email mono">
-            {profile.email}
-          </a>
+            <a href={`mailto:${profile.email}`} className="contact-email mono">
+              {profile.email}
+            </a>
 
-          <div className="social-links">
-            {profile.socials.map((s) => (
-              <a key={s.label} href={s.url} target="_blank" rel="noreferrer">
-                {s.label}
-              </a>
-            ))}
+            <div className="social-links">
+              {profile.socials.map((s) => {
+                const Icon = socialIcons[s.label];
+                return (
+                  <a key={s.label} href={s.url} target="_blank" rel="noreferrer" className="social-link" aria-label={s.label}>
+                    {Icon ? <Icon /> : null}
+                    <span>{s.label}</span>
+                  </a>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        </Reveal>
 
+        <Reveal delay={120}>
         <form className="editor-window contact-form" onSubmit={handleSubmit}>
           <div className="editor-titlebar">
             <div className="editor-dots">
@@ -141,6 +157,7 @@ export default function Contact() {
             )}
           </div>
         </form>
+        </Reveal>
       </div>
 
       <style>{`
@@ -171,16 +188,25 @@ export default function Contact() {
         }
         .social-links {
           display: flex;
-          gap: 18px;
+          gap: 14px;
           flex-wrap: wrap;
         }
-        .social-links a {
-          font-size: 13.5px;
+        .social-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 7px;
+          font-size: 13px;
           color: var(--muted);
-          transition: color 0.15s ease;
+          padding: 8px 14px;
+          border: 1px solid var(--border);
+          border-radius: 7px;
+          background: var(--panel);
+          transition: color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
         }
-        .social-links a:hover {
-          color: var(--text);
+        .social-link:hover {
+          color: var(--accent);
+          border-color: var(--accent);
+          transform: translateY(-2px);
         }
         .form-body {
           padding: 24px;
