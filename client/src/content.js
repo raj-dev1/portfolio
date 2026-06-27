@@ -3,12 +3,12 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 export const profile = {
-  name: "Arjun Dev",
+  name: "RAJASEKAR V",
   role: "Full-Stack Developer",
   tagline: "I build fast, reliable web products for clients worldwide.",
   location: "Chennai, India · Remote",
   availability: "Available for freelance projects",
-  email: "hello@arjundev.com",
+  email: "mailtorajasekar13@gmail.com",
   socials: [
     { label: "GitHub", url: "https://github.com/yourhandle" },
     { label: "LinkedIn", url: "https://linkedin.com/in/yourhandle" },
