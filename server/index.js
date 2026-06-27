@@ -130,8 +130,14 @@ function getTransporter() {
   if (!EMAIL_USER || !EMAIL_PASS) return null;
 
   return nodemailer.createTransport({
-    service: "gmail",
-    auth: { user: EMAIL_USER, pass: EMAIL_PASS },
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true,           // Port 465
+    auth: {
+      user: EMAIL_USER,
+      pass: EMAIL_PASS
+    },
+    connectionTimeout: 10000 // 
   });
 }
 
