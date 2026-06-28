@@ -166,6 +166,16 @@ export function GitIcon(props) {
   );
 }
 
+export function InstagramIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="17" height="17" {...props}>
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 export const techIcons = {
   react: ReactIcon,
   node: NodeIcon,

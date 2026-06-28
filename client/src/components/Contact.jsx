@@ -2,14 +2,7 @@ import { useState } from "react";
 import { contact, profile } from "../content.js";
 import { API_URL } from "../config.js";
 import Reveal from "./Reveal.jsx";
-import { GithubIcon, LinkedinIcon, UpworkIcon, XIcon } from "./icons.jsx";
-
-const socialIcons = {
-  GitHub: GithubIcon,
-  LinkedIn: LinkedinIcon,
-  Upwork: UpworkIcon,
-  "Twitter / X": XIcon,
-};
+import { MailIcon, LocationIcon } from "./icons.jsx";
 
 const initialForm = { name: "", email: "", budget: "", message: "" };
 
@@ -34,9 +27,7 @@ export default function Contact() {
       });
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || "Something went wrong. Please try again.");
-      }
+      if (!res.ok) throw new Error(data.error || "Something went wrong. Please try again.");
 
       setStatus({ state: "success", message: data.message || "Message sent!" });
       setForm(initialForm);
@@ -50,213 +41,197 @@ export default function Contact() {
 
   return (
     <section id="contact" className="section contact">
-      <div className="container contact-grid">
+      <div className="container">
         <Reveal>
-          <div>
-            <p className="eyebrow mono">get in touch</p>
+          <div className="section-heading">
+            <p className="eyebrow" style={{ justifyContent: "center" }}>Get In Touch</p>
             <h2 className="section-title">{contact.heading}</h2>
-            <p className="contact-sub">{contact.subheading}</p>
-            <p className="contact-desc">{contact.description}</p>
-
-            <a href={`mailto:${profile.email}`} className="contact-email mono">
-              {profile.email}
-            </a>
-
-            <div className="social-links">
-              {profile.socials.map((s) => {
-                const Icon = socialIcons[s.label];
-                return (
-                  <a key={s.label} href={s.url} target="_blank" rel="noreferrer" className="social-link" aria-label={s.label}>
-                    {Icon ? <Icon /> : null}
-                    <span>{s.label}</span>
-                  </a>
-                );
-              })}
-            </div>
+            <p className="section-subtitle">{contact.subheading}</p>
           </div>
         </Reveal>
 
-        <Reveal delay={120}>
-        <form className="editor-window contact-form" onSubmit={handleSubmit}>
-          <div className="editor-titlebar">
-            <div className="editor-dots">
-              <span></span>
-              <span></span>
-              <span></span>
+        <div className="contact-grid">
+          <Reveal>
+            <div className="contact-info">
+              <h3 className="contact-info-title">{contact.formTitle}</h3>
+              <p className="contact-info-sub">{contact.formSubtitle}</p>
+
+              <div className="info-rows">
+                <a href={`mailto:${profile.email}`} className="info-row">
+                  <span className="info-icon"><MailIcon /></span>
+                  <span>{profile.email}</span>
+                </a>
+                <div className="info-row">
+                  <span className="info-icon"><LocationIcon /></span>
+                  <span>{profile.location}</span>
+                </div>
+              </div>
             </div>
-            <div className="editor-tabs">
-              <span className="editor-tab active">message.send()</span>
-            </div>
-          </div>
+          </Reveal>
 
-          <div className="form-body">
-            <label className="form-label mono" htmlFor="name">
-              name
-            </label>
-            <input
-              id="name"
-              name="name"
-              type="text"
-              required
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Jane Smith"
-            />
+          <Reveal delay={120}>
+            <form className="contact-form-card" onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-field">
+                  <label htmlFor="name">Name</label>
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    required
+                    value={form.name}
+                    onChange={handleChange}
+                    placeholder="John Carter"
+                  />
+                </div>
+                <div className="form-field">
+                  <label htmlFor="email">Email</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    value={form.email}
+                    onChange={handleChange}
+                    placeholder="example@email.com"
+                  />
+                </div>
+              </div>
 
-            <label className="form-label mono" htmlFor="email">
-              email
-            </label>
-            <input
-              id="email"
-              name="email"
-              type="email"
-              required
-              value={form.email}
-              onChange={handleChange}
-              placeholder="jane@company.com"
-            />
+              <div className="form-field">
+                <label htmlFor="budget">Budget <span className="optional">(optional)</span></label>
+                <input
+                  id="budget"
+                  name="budget"
+                  type="text"
+                  value={form.budget}
+                  onChange={handleChange}
+                  placeholder="$1,000 – $5,000"
+                />
+              </div>
 
-            <label className="form-label mono" htmlFor="budget">
-              budget <span className="optional">(optional)</span>
-            </label>
-            <input
-              id="budget"
-              name="budget"
-              type="text"
-              value={form.budget}
-              onChange={handleChange}
-              placeholder="$1,000 – $5,000"
-            />
+              <div className="form-field">
+                <label htmlFor="message">Message</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  required
+                  rows={5}
+                  value={form.message}
+                  onChange={handleChange}
+                  placeholder="Please type your message here..."
+                />
+              </div>
 
-            <label className="form-label mono" htmlFor="message">
-              message
-            </label>
-            <textarea
-              id="message"
-              name="message"
-              required
-              rows={5}
-              value={form.message}
-              onChange={handleChange}
-              placeholder="Tell me about your project..."
-            />
+              <button type="submit" className="btn btn-primary submit-btn" disabled={status.state === "loading"}>
+                {status.state === "loading" ? "Sending..." : "Send message"}
+              </button>
 
-            <button type="submit" className="btn btn-primary" disabled={status.state === "loading"}>
-              {status.state === "loading" ? "Sending..." : "Send message"}
-            </button>
-
-            {status.state === "success" && (
-              <p className="form-status success" role="status">
-                {status.message}
-              </p>
-            )}
-            {status.state === "error" && (
-              <p className="form-status error" role="alert">
-                {status.message}
-              </p>
-            )}
-          </div>
-        </form>
-        </Reveal>
+              {status.state === "success" && <p className="form-status success" role="status">{status.message}</p>}
+              {status.state === "error" && <p className="form-status error" role="alert">{status.message}</p>}
+            </form>
+          </Reveal>
+        </div>
       </div>
 
       <style>{`
-        .contact { border-bottom: none; }
         .contact-grid {
           display: grid;
-          grid-template-columns: 1fr 1.1fr;
-          gap: 56px;
+          grid-template-columns: 0.85fr 1.15fr;
+          gap: 48px;
           align-items: start;
         }
-        .contact-sub {
-          font-size: 19px;
-          font-weight: 600;
-          margin-bottom: 10px;
+        .contact-info-title {
+          font-family: var(--font-display);
+          font-size: 26px;
+          font-weight: 800;
+          margin-bottom: 14px;
         }
-        .contact-desc {
+        .contact-info-sub {
           color: var(--muted);
-          max-width: 420px;
-          margin-bottom: 28px;
+          font-size: 15.5px;
+          line-height: 1.7;
+          margin-bottom: 30px;
         }
-        .contact-email {
-          display: inline-block;
-          font-size: 17px;
-          color: var(--accent);
-          border-bottom: 1px solid var(--accent);
-          padding-bottom: 3px;
-          margin-bottom: 24px;
-        }
-        .social-links {
-          display: flex;
-          gap: 14px;
-          flex-wrap: wrap;
-        }
-        .social-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 7px;
-          font-size: 13px;
-          color: var(--muted);
-          padding: 8px 14px;
-          border: 1px solid var(--border);
-          border-radius: 7px;
-          background: var(--panel);
-          transition: color 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
-        }
-        .social-link:hover {
-          color: var(--accent);
-          border-color: var(--accent);
-          transform: translateY(-2px);
-        }
-        .form-body {
-          padding: 24px;
+        .info-rows {
           display: flex;
           flex-direction: column;
+          gap: 16px;
         }
-        .form-label {
-          font-size: 12.5px;
-          color: var(--muted);
-          margin-bottom: 8px;
-          margin-top: 16px;
+        .info-row {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          font-size: 14.5px;
+          color: var(--text);
         }
-        .form-label:first-child {
-          margin-top: 0;
+        .info-icon {
+          width: 40px;
+          height: 40px;
+          border-radius: 12px;
+          background: var(--accent-soft);
+          color: var(--accent);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .contact-form-card {
+          background: var(--panel);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: 32px;
+          display: flex;
+          flex-direction: column;
+          gap: 18px;
+        }
+        .form-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+        }
+        .form-field {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .form-field label {
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--text);
         }
         .optional {
-          color: #4a5560;
+          color: var(--muted);
+          font-weight: 400;
         }
-        .form-body input,
-        .form-body textarea {
-          width: 100%;
+        .form-field input,
+        .form-field textarea {
           background: var(--panel-2);
           border: 1px solid var(--border);
           border-radius: var(--radius-sm);
-          padding: 11px 14px;
+          padding: 12px 16px;
           color: var(--text);
           font-family: var(--font-body);
           font-size: 14.5px;
           resize: vertical;
           transition: border-color 0.15s ease;
         }
-        .form-body input:focus,
-        .form-body textarea:focus {
+        .form-field input:focus,
+        .form-field textarea:focus {
           border-color: var(--accent);
         }
-        .form-body button {
-          margin-top: 22px;
+        .submit-btn {
           justify-content: center;
+          margin-top: 4px;
         }
-        .form-status {
-          margin-top: 14px;
-          font-size: 13.5px;
-        }
+        .form-status { font-size: 13.5px; }
         .form-status.success { color: var(--green); }
         .form-status.error { color: var(--danger); }
-        @media (max-width: 800px) {
-          .contact-grid {
-            grid-template-columns: 1fr;
-            gap: 40px;
-          }
+        @media (max-width: 860px) {
+          .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+        }
+        @media (max-width: 540px) {
+          .form-row { grid-template-columns: 1fr; }
         }
       `}</style>
     </section>
