@@ -47,3 +47,131 @@ export function ArrowUpRightIcon(props) {
     </svg>
   );
 }
+
+export function StarIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16" {...props}>
+      <path d="M12 2.5l2.9 6.4 7 .6-5.3 4.6 1.6 6.9L12 17.6l-6.2 3.4 1.6-6.9L2.1 9.5l7-.6L12 2.5Z" />
+    </svg>
+  );
+}
+
+export function ChevronLeftIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18" {...props}>
+      <path d="M15 18l-6-6 6-6" />
+    </svg>
+  );
+}
+
+export function ChevronRightIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18" {...props}>
+      <path d="M9 18l6-6-6-6" />
+    </svg>
+  );
+}
+
+export function LocationIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="18" height="18" {...props}>
+      <path d="M12 21s7-6.5 7-11.5A7 7 0 0 0 5 9.5C5 14.5 12 21 12 21Z" />
+      <circle cx="12" cy="9.5" r="2.3" />
+    </svg>
+  );
+}
+
+export function GearIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...props}>
+      <circle cx="12" cy="12" r="3" />
+      <path d="M19.4 13.5a7.6 7.6 0 0 0 0-3l1.8-1.4-2-3.4-2.1.6a7.4 7.4 0 0 0-2.6-1.5L14 2.5h-4l-.5 2.3a7.4 7.4 0 0 0-2.6 1.5l-2.1-.6-2 3.4L4.6 10.5a7.6 7.6 0 0 0 0 3L2.8 15.4l2 3.4 2.1-.6c.76.69 1.64 1.21 2.6 1.5l.5 2.3h4l.5-2.3a7.4 7.4 0 0 0 2.6-1.5l2.1.6 2-3.4-1.8-1.5Z" />
+    </svg>
+  );
+}
+
+export function ShareIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...props}>
+      <circle cx="6" cy="12" r="2.6" />
+      <circle cx="18" cy="5.5" r="2.6" />
+      <circle cx="18" cy="18.5" r="2.6" />
+      <path d="M8.3 10.7 15.7 6.8M8.3 13.3l7.4 3.9" />
+    </svg>
+  );
+}
+
+export function ReactIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.3" width="20" height="20" {...props}>
+      <circle cx="12" cy="12" r="1.8" fill="currentColor" stroke="none" />
+      <ellipse cx="12" cy="12" rx="9.5" ry="3.8" />
+      <ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(60 12 12)" />
+      <ellipse cx="12" cy="12" rx="9.5" ry="3.8" transform="rotate(120 12 12)" />
+    </svg>
+  );
+}
+
+export function NodeIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" {...props}>
+      <path d="M12 1.5 21 6.7v10.6L12 22.5 3 17.3V6.7L12 1.5Zm0 2.3-7 4.1v8.2l7 4.1 7-4.1V7.9l-7-4.1Zm-2.6 9.8c0 1 .7 1.6 2 1.6 1.1 0 1.7-.4 1.7-1.1 0-.7-.5-.9-1.6-1.2l-.7-.2c-1.9-.4-2.8-1.2-2.8-2.6 0-1.6 1.3-2.6 3.3-2.6 1.7 0 3 .8 3.2 2.2h-1.7c-.1-.6-.7-1-1.5-1-.9 0-1.5.4-1.5 1 0 .6.4.8 1.5 1.1l.7.2c2.1.5 2.9 1.2 2.9 2.6 0 1.7-1.3 2.7-3.5 2.7-1.9 0-3.3-.9-3.4-2.5h1.6Z" />
+    </svg>
+  );
+}
+
+export function ExpressIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" width="18" height="18" {...props}>
+      <path d="M2 17c2-3 2-9 0-12M22 17c-2-3-2-9 0-12" />
+      <path d="M6.5 12h11M6.5 7h7M6.5 17h9" />
+    </svg>
+  );
+}
+
+export function DatabaseIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" width="18" height="18" {...props}>
+      <ellipse cx="12" cy="5.5" rx="8" ry="3" />
+      <path d="M4 5.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6M4 11.5v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6" />
+    </svg>
+  );
+}
+
+export function TypescriptIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="16" height="16" {...props}>
+      <path d="M3 5h8M7 5v14" />
+      <path d="M14 16.5c.5.8 1.4 1.3 2.4 1.3 1.3 0 2.3-.7 2.3-1.8 0-1-.7-1.4-2.2-1.8l-.6-.2c-1.6-.4-2.5-1.1-2.5-2.4 0-1.4 1.2-2.4 2.9-2.4 1.4 0 2.5.6 3 1.7" />
+    </svg>
+  );
+}
+
+export function TailwindIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20" {...props}>
+      <path d="M12 6.5c-2.7 0-4.4 1.4-5 4 .9-1.2 2-1.7 3.2-1.4.7.2 1.2.7 1.8 1.3.9 1 2 2.1 4.3 2.1 2.7 0 4.4-1.4 5-4-.9 1.2-2 1.7-3.2 1.4-.7-.2-1.2-.7-1.8-1.3-.9-1-2-2.1-4.3-2.1Zm-5 6.5c-2.7 0-4.4 1.4-5 4 .9-1.2 2-1.7 3.2-1.4.7.2 1.2.7 1.8 1.3.9 1 2 2.1 4.3 2.1 2.7 0 4.4-1.4 5-4-.9 1.2-2 1.7-3.2 1.4-.7-.2-1.2-.7-1.8-1.3-.9-1-2-2.1-4.3-2.1Z" />
+    </svg>
+  );
+}
+
+export function GitIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" width="18" height="18" {...props}>
+      <circle cx="6" cy="6" r="2" />
+      <circle cx="6" cy="18" r="2" />
+      <circle cx="17" cy="12" r="2" />
+      <path d="M6 8v8M6 8c0 4 5 4 9 4" />
+    </svg>
+  );
+}
+
+export const techIcons = {
+  react: ReactIcon,
+  node: NodeIcon,
+  express: ExpressIcon,
+  database: DatabaseIcon,
+  typescript: TypescriptIcon,
+  tailwind: TailwindIcon,
+  git: GitIcon,
+};

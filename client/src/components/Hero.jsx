@@ -1,177 +1,84 @@
-import { useEffect, useRef, useState } from "react";
 import { profile } from "../content.js";
-
-const CODE_LINES = [
-  { n: 1, html: `<span class="kw">const</span> <span class="var">developer</span> = {` },
-  { n: 2, html: `  name: <span class="str">"${profile.name}"</span>,` },
-  { n: 3, html: `  role: <span class="str">"${profile.role}"</span>,` },
-  { n: 4, html: `  stack: [<span class="str">"React"</span>, <span class="str">"Node.js"</span>, <span class="str">"PostgreSQL"</span>],` },
-  { n: 5, html: `  basedIn: <span class="str">"${profile.location}"</span>,` },
-  { n: 6, html: `  <span class="cmt">// open to remote freelance work</span>` },
-  { n: 7, html: `  available: <span class="bool">true</span>,` },
-  { n: 8, html: `};` },
-];
-
-function useTypedCode() {
-  const [visibleChars, setVisibleChars] = useState(0);
-  const fullText = CODE_LINES.map((l) => l.html.replace(/<[^>]+>/g, "")).join("\n");
-  const totalChars = fullText.length;
-  const doneRef = useRef(false);
-
-  useEffect(() => {
-    if (doneRef.current) return;
-    const id = setInterval(() => {
-      setVisibleChars((v) => {
-        if (v >= totalChars) {
-          clearInterval(id);
-          doneRef.current = true;
-          return v;
-        }
-        return v + 2;
-      });
-    }, 16);
-    return () => clearInterval(id);
-  }, [totalChars]);
-
-  let consumed = 0;
-  return CODE_LINES.map((line) => {
-    const plain = line.html.replace(/<[^>]+>/g, "");
-    const start = consumed;
-    consumed += plain.length + 1;
-    const charsForThisLine = Math.max(0, Math.min(plain.length, visibleChars - start));
-    if (charsForThisLine <= 0) return { ...line, show: "" };
-    if (charsForThisLine >= plain.length) return { ...line, show: line.html };
-    return { ...line, show: plain.slice(0, charsForThisLine) };
-  });
-}
-
-function useRotatingWord(words, interval = 2400) {
-  const [index, setIndex] = useState(0);
-  const [fading, setFading] = useState(false);
-
-  useEffect(() => {
-    const id = setInterval(() => {
-      setFading(true);
-      setTimeout(() => {
-        setIndex((i) => (i + 1) % words.length);
-        setFading(false);
-      }, 280);
-    }, interval);
-    return () => clearInterval(id);
-  }, [words.length, interval]);
-
-  return { word: words[index], fading };
-}
+import { ReactIcon, NodeIcon, TypescriptIcon, DatabaseIcon, GearIcon, ShareIcon } from "./icons.jsx";
 
 export default function Hero() {
-  const renderedLines = useTypedCode();
-  const { word, fading } = useRotatingWord(profile.rotatingWords);
-
   return (
     <section id="top" className="hero">
       <div className="container hero-grid">
         <div className="hero-copy">
           <div className="status-pill">
             <span className="status-dot" />
-            <span className="mono">{profile.availability}</span>
+            <span>{profile.availability}</span>
           </div>
 
           <h1 className="hero-title">
-            I turn ideas into
-            <span className={`hero-rotator ${fading ? "fading" : ""}`}>{word}</span>
+            Hi, I'm
+            <span className="hero-name">{profile.name}</span>
           </h1>
 
           <p className="hero-tagline">{profile.tagline}</p>
 
           <div className="hero-actions">
             <a href="#projects" className="btn btn-primary">
-              View work
+              View Projects
             </a>
-            <a href="#contact" className="btn">
-              Start a project →
+            <a href="#contact" className="btn btn-outline">
+              Let's Collaborate ↗
             </a>
-          </div>
-
-          <div className="hero-meta mono">
-            <span>{profile.name}</span>
-            <span className="meta-dot">·</span>
-            <span>{profile.role}</span>
-            <span className="meta-dot">·</span>
-            <span>{profile.location}</span>
           </div>
         </div>
 
-        <div className="hero-editor">
-          <div className="editor-window">
-            <div className="editor-titlebar">
-              <div className="editor-dots">
-                <span></span>
-                <span></span>
-                <span></span>
-              </div>
-              <div className="editor-tabs">
-                <span className="editor-tab active">developer.js</span>
-              </div>
-            </div>
-            <div className="editor-body mono">
-              <pre>
-                {renderedLines.map((line) => (
-                  <div className="code-line" key={line.n}>
-                    <span className="line-no">{String(line.n).padStart(2, "0")}</span>
-                    <code dangerouslySetInnerHTML={{ __html: line.show }} />
-                  </div>
-                ))}
-                <span className="cursor">▍</span>
-              </pre>
+        <div className="hero-avatar-wrap">
+          <div className="avatar-glow" />
+          <div className="avatar-ring">
+            <div className="avatar-circle">
+              <span className="avatar-initials">{profile.initials}</span>
             </div>
           </div>
+
+          <span className="float-badge badge-1"><ReactIcon /></span>
+          <span className="float-badge badge-2"><NodeIcon /></span>
+          <span className="float-badge badge-3"><TypescriptIcon /></span>
+          <span className="float-badge badge-4"><DatabaseIcon /></span>
+          <span className="mini-badge mini-1"><ShareIcon /></span>
+          <span className="mini-badge mini-2"><GearIcon /></span>
         </div>
       </div>
 
       <style>{`
         .hero {
           padding: 168px 0 96px;
-          border-bottom: 1px solid var(--border);
-          background:
-            radial-gradient(ellipse 70% 50% at 80% 0%, rgba(124,58,237,0.08), transparent 60%);
         }
         .hero-grid {
           display: grid;
-          grid-template-columns: 1.05fr 1fr;
+          grid-template-columns: 1.1fr 1fr;
           gap: 56px;
           align-items: center;
         }
         .hero-copy {
           animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
-        .hero-editor {
-          animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
-          animation-delay: 0.15s;
-        }
         @keyframes heroFadeUp {
           from { opacity: 0; transform: translateY(18px); }
           to { opacity: 1; transform: translateY(0); }
         }
-        @media (prefers-reduced-motion: reduce) {
-          .hero-copy, .hero-editor { animation: none; }
-        }
+        @media (prefers-reduced-motion: reduce) { .hero-copy { animation: none; } }
 
         .status-pill {
           display: inline-flex;
           align-items: center;
           gap: 9px;
           font-size: 13px;
+          font-weight: 500;
           color: var(--text);
           background: var(--panel);
           border: 1px solid var(--border);
-          padding: 7px 14px 7px 11px;
-          border-radius: 999px;
-          margin-bottom: 26px;
-          box-shadow: 0 2px 10px -4px rgba(28, 23, 38, 0.08);
+          padding: 7px 16px 7px 12px;
+          border-radius: var(--radius-pill);
+          margin-bottom: 28px;
         }
         .status-dot {
-          width: 8px;
-          height: 8px;
+          width: 8px; height: 8px;
           border-radius: 50%;
           background: var(--green);
           position: relative;
@@ -191,93 +98,144 @@ export default function Hero() {
           70% { transform: scale(1.8); opacity: 0; }
           100% { opacity: 0; }
         }
-        @media (prefers-reduced-motion: reduce) {
-          .status-dot::after { animation: none; opacity: 0; }
-        }
+        @media (prefers-reduced-motion: reduce) { .status-dot::after { animation: none; opacity: 0; } }
 
         .hero-title {
           font-family: var(--font-display);
-          font-size: clamp(32px, 4.6vw, 48px);
-          font-weight: 700;
-          line-height: 1.15;
+          font-size: clamp(36px, 5.2vw, 56px);
+          font-weight: 800;
+          line-height: 1.1;
           letter-spacing: -0.02em;
-          margin-bottom: 18px;
+          margin-bottom: 20px;
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: 2px;
         }
-        .hero-rotator {
-          color: var(--accent);
-          display: inline-block;
-          transition: opacity 0.28s ease, transform 0.28s ease;
-        }
-        .hero-rotator.fading {
-          opacity: 0;
-          transform: translateY(6px);
+        .hero-name {
+          background: var(--gradient);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
         }
         .hero-tagline {
           font-size: 17px;
           color: var(--muted);
-          max-width: 460px;
-          margin-bottom: 32px;
+          max-width: 480px;
+          margin-bottom: 36px;
+          line-height: 1.7;
         }
         .hero-actions {
           display: flex;
           gap: 14px;
           flex-wrap: wrap;
-          margin-bottom: 28px;
         }
-        .hero-meta {
+        .btn-outline {
+          border-color: var(--border);
+        }
+        .btn-outline:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+        }
+
+        /* ── Avatar + floating badges ─────────────────────────────────── */
+        .hero-avatar-wrap {
+          position: relative;
+          width: 100%;
+          max-width: 360px;
+          aspect-ratio: 1;
+          margin: 0 auto;
+          animation: heroFadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: 0.15s;
+        }
+        @media (prefers-reduced-motion: reduce) { .hero-avatar-wrap { animation: none; } }
+
+        .avatar-glow {
+          position: absolute;
+          inset: 6%;
+          border-radius: 50%;
+          background: var(--gradient);
+          filter: blur(50px);
+          opacity: 0.35;
+        }
+        .avatar-ring {
+          position: absolute;
+          inset: 10%;
+          border-radius: 50%;
+          background: var(--gradient);
+          padding: 5px;
+        }
+        .avatar-circle {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          background: var(--panel);
           display: flex;
           align-items: center;
-          gap: 8px;
-          font-size: 13px;
-          color: var(--muted);
-          flex-wrap: wrap;
+          justify-content: center;
+          box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
         }
-        .meta-dot { color: var(--border); }
+        .avatar-initials {
+          font-family: var(--font-display);
+          font-size: clamp(48px, 7vw, 72px);
+          font-weight: 800;
+          background: var(--gradient);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+        }
 
-        .editor-body {
-          padding: 20px 0;
-          font-size: 13.5px;
-          line-height: 1.85;
-          min-height: 230px;
-        }
-        .editor-body pre {
-          white-space: pre-wrap;
-          word-break: break-word;
-        }
-        .code-line {
+        .float-badge {
+          position: absolute;
+          width: 56px;
+          height: 56px;
+          border-radius: 16px;
+          background: var(--panel);
+          border: 1px solid var(--border);
           display: flex;
-          gap: 18px;
-          padding: 0 20px;
-        }
-        .line-no {
-          color: #c9c2d8;
-          user-select: none;
-          width: 16px;
-          flex-shrink: 0;
-          text-align: right;
-        }
-        .kw { color: var(--accent); }
-        .str { color: var(--accent-2); }
-        .cmt { color: #9b93ab; }
-        .bool { color: var(--green); }
-        .var { color: #be185d; }
-        .cursor {
-          margin-left: 56px;
+          align-items: center;
+          justify-content: center;
           color: var(--accent);
-          animation: blink 1s step-start infinite;
+          box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+          animation: floatBadge 4s ease-in-out infinite;
         }
-        @keyframes blink {
-          50% { opacity: 0; }
+        .badge-1 { top: 2%;  left: -6%;  animation-delay: 0s; }
+        .badge-2 { top: 6%;  right: -8%; animation-delay: 0.6s; }
+        .badge-3 { bottom: 10%; left: -10%; animation-delay: 1.2s; }
+        .badge-4 { bottom: 4%; right: -4%; animation-delay: 1.8s; }
+        @keyframes floatBadge {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
         }
+        @media (prefers-reduced-motion: reduce) { .float-badge { animation: none; } }
+
+        .mini-badge {
+          position: absolute;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          background: var(--panel-2);
+          border: 1px solid var(--border);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--accent-2);
+          animation: floatBadge 5s ease-in-out infinite;
+        }
+        .mini-1 { top: 36%; left: -2%; animation-delay: 0.3s; }
+        .mini-2 { top: 30%; right: 2%; animation-delay: 0.9s; }
+        @media (prefers-reduced-motion: reduce) { .mini-badge { animation: none; } }
+
         @media (max-width: 860px) {
           .hero { padding: 140px 0 64px; }
           .hero-grid {
             grid-template-columns: 1fr;
-            gap: 40px;
+            gap: 56px;
           }
+          .hero-copy { text-align: center; }
+          .status-pill { margin-left: auto; margin-right: auto; }
+          .hero-tagline { margin-left: auto; margin-right: auto; }
+          .hero-actions { justify-content: center; }
+          .hero-avatar-wrap { max-width: 280px; }
         }
       `}</style>
     </section>
